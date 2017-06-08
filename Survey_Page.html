@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="jquery-ui.css" type="text/css">
+	<script src="jquery-1.11.3.js"></script>
+	<script src="jquery-ui.js"></script>
+	<script>
+	$(document).ready(function(){
+	//  $(document).tooltip();
+//	$("#dialog").dialog({modal: true, title: "Error Message"});
+	});
+	</script>
+	<title>Survey Page</title>
+	<style>
+	h2 {font-family:vendana;color:black;}
+	p {}
+	div {
+<!--		width: 1510px; -->
+<!--		height: 700px; -->
+<!--		display: block; -->
+<!--		position: relative; -->
+	}
+	
+	span.jquery {
+		text-align: center;
+	}
+	
+	div::after {
+		content: "";
+		background: url(GMU_Background.jpg);
+		opacity: 0.5;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		position: absolute;
+		z-index: -1;   
+	}
+	
+	.multicolumns{
+		-webkit-column-count: 3;
+		-moz-column-count: 3;
+		-o-column-count: 3;
+		column-count: 3;
+		
+		-webkit-column-gap: 30px;
+		-moz-column-gap: 30px;
+		-o-column-gap: 30px;
+		column-gap: 30px;
+		
+		-webkit-column-rule: 1px outset black;
+		-moz-column-rule: 1px outset black;
+		-o-column-rule: 1px outset black;
+		column-rule: 1px outset black;
+	}
+	</style>
+	<script>
+		var cookie_name='';
+		var display_message;
+		var current_date = new Date();
+		var hours = current_date.getHours();
+		
+		// Check if there is already a cookie for this page
+		if(document.cookie)
+		{
+			// if there is a cookie then extract the cookie name from the cookie string
+			var cookie_name_exists = unescape(document.cookie);
+			var cookie_split = cookie_name_exists.split("=");
+			
+			// Set the extracted cookie name 
+			cookie_name = cookie_split[1];
+		}
+		else
+		{
+			var current_time;
+			var cookie_expires_time;
+			
+			current_time = new Date();												// Get current Date
+			current_time.setTime(current_time.getTime() + (5*60*1000));				// Adding to the current time
+			cookie_expires_time = " expires=" + current_time.toUTCString();			// Form the expiration string
+			
+			
+			cookie_name = window.prompt("Kindly Enter your name", "Varun");			// Prompt the user to enter the cookie name
+			
+			// Set the cookie with the user entered name and an expiration time
+			document.cookie = "cookie_name=" + escape(cookie_name) + ";" + cookie_expires_time;	
+		}
+		
+		// Check for the time of the day to display the appropriate message
+		if((hours >= 4) && hours < 12)
+			display_message = "Good Morning, " + "<i>" + cookie_name + "</i>";
+		else if((hours >= 12) && (hours < 16))
+			display_message = "Good Afternoon, " + "<i>" + cookie_name + "</i>" ;
+		else if((hours >= 16) && (hours < 21))
+			display_message = "Good Evening, " + "<i>" + cookie_name + "</i>" ;
+		else
+			display_message = "Good Night, " + "<i>" + cookie_name + "</i>" ;
+			
+		// Display the message with the new cookie name
+		//document.writeln(display_message + ". Welcome to Assignment #3.");
+		//document.writeln("<a href=javascript:ChangeCookieName()>" + "click here if you are not " + cookie_name + "</a>");
+		
+		function ChangeCookieName()
+		{
+			var cookie_reset_name;
+			var cookie_expires;
+			
+			cookie_reset_name = "cookie_name=;";
+			cookie_expires = "expires=Thu, 01 Jan 1970 00:00:00 UTC";
+			document.cookie = cookie_reset_name + "=null;" + cookie_expires;
+	
+			location.reload();
+
+		}
+	</script>
+	</head>
+	
+	<body>
+	<p id="dialog" title="Error"></p>
+	<div>
+		<form autocomplete="on" id="myForm">
+		<script>
+		document.writeln("<b>" + display_message + ". Welcome to Assignment #3.</b>");
+		document.writeln("<a href=javascript:ChangeCookieName()>" + "click here if you are not " + cookie_name + "</a>");
+		</script>
+			<h2><u>Kindly fill out the details</u></h2>
+			<hr />
+			<div class="multicolumns">
+				First Name*:<br /><input type="text" id="fname" name="fname" required />
+				<br /><br />Last Name*:<br /> <input type="text" id="lname" name="lname" required />	
+				
+				<br /><br />Student ID*: 
+				<br /><input type="text" id="student_id" name="student_id" required />
+				
+				<br /><br />Graduated(mm-yyyy):
+				<br /><input list="month">
+					<datalist id="month">
+						<option value="January">
+						<option value="Febuary">
+						<option value="March">
+						<option value="April">
+						<option value="May">
+						<option value="June">
+						<option value="July">
+						<option value="August">
+						<option value="September">
+						<option value="October">
+						<option value="November">
+						<option value="December">
+					</datalist> -
+					<input type="text" name="year">
+				<br /><br />Street Address*:<br />  <input type="text" id="saddress" name="saddress" required />
+				<br /><br />City:<br /> <input type="text" id="city" name="city" />
+				<br /><br />State:<br /> <input type="text" id="state" name="state" />
+				
+				<br /><br />Zip:
+				<br /><input type="text" id="zip" name="zip" onblur="ValidateZipCode(this.value)" />
+				<span id="zip_err" name="zip_err"></span>
+				
+				<br /><br />Telephone Number*:
+				<br /><input type="text" name="telenum" placeholder="(###) ###-####" pattern="\(\d{3}\) +\d{3}-\d{4}" required />(###) ###-####
+				
+				<br /><br />E-Mail*:
+				<br /><input type="text" placeholder="name@domain.com" id="email_id" required />
+				
+				<br /><br />URL:
+				<br /><input type="text" name="url" placeholder="http://www.domainname.com">(http://www.domainname.com)</input>
+			
+				<br /><br />Date of survey:
+				<br /><input type="text" name="dateofsurvey" placeholder="mm-dd-yyyy">(mm-dd-yyyy)</input>
+						
+				<br /><br />Data: 
+				<br /><input type="text" id="numbers" name="numbers" onblur="cal_avg_max()" />						
+			
+				<br /><br /><h2><u>What did you like most about the campus?</u></h2>
+				<input type="checkbox" name="thingstolike" value="students">Students<br />
+				<input type="checkbox" name="thingstolike" value="locations">Locations<br />
+				<input type="checkbox" name="thingstolike" value="campus">Campus<br />
+				<input type="checkbox" name="thingstolike" value="atmosphere">Atmosphere<br />
+				<input type="checkbox" name="thingstolike" value="Dormrooms">Dorm Rooms<br />
+				<input type="checkbox" name="thingstolike" value="sports">Sports<br />
+				
+				<br /><h2><u>As a prospective student what interested you most in the university?</u></h2>
+				<input type="radio" name="interests" value="friends">Friends<br />
+				<input type="radio" name="interests" value="television">Television<br />
+				<input type="radio" name="interests" value="internet">Internet<br />
+				<input type="radio" name="interests" value="other">Other<br />	
+				
+				<br /><br /><h2><u>What is the likelihood of you recommending this school to other prospective students?</u></h2>
+				<select>
+					<option>Very Likely</option>
+					<option>Likely</option>
+					<option>Unlikely</option>
+				</select>
+				
+				<br /><br /><br /><h2><u>Additional Comments</u></h2>
+				<textarea style='text-align:left' name="comments" rows="5" cols="40"></textarea>
+				<br /><br />
+				<b>Note: Fields with "*" cannot be left blank.</b><br /><br />
+				<br /><input type="submit" value="Submit Survery" onclick="PageValidation();"/>
+				<button type="button" onclick="ClearContents();">Clear All</button> 
+				<a href="https://www2.gmu.edu/">
+					<img src="GMU_logo.jpg" style="width:150px;height:100px;" align="right" title="“Please visit http://www.gmu.edu for more information.">
+				</a>
+				<br /><p align="center" style="font-size:175%"><b><u>By Varun Rajavelu</u></b></p>	
+			</div>
+			<hr />
+			<script>
+			getfocus();			
+			function getfocus(){
+				document.getElementById("fname").focus();
+			}
+			
+			function ClearContents(){
+				document.getElementById("myForm").reset();
+				location.reload();
+			}
+			
+			function cal_avg_max(){
+				var sum = 0;
+				var avg = 0;
+				var numbers;
+				var totalnum;
+				var max = 0;
+				var num_value;
+				// Split the number with commas
+				numbers = document.getElementById("numbers").value.split(",");
+				totalnum = numbers.length;	// Get the number of items entered
+			
+				if(totalnum >= 10){
+				
+					// Check if the entered value is between 1 & 100
+					for(var k_iterator = 0; k_iterator < totalnum; k_iterator++){
+						num_value = parseInt(numbers[k_iterator]);
+						if((num_value < 1) || (num_value > 100)){
+							alert("Error: The numbers should be between 1 and 100.");
+							document.getElementById("numbers").focus();
+							return;
+						}
+					}
+					
+					// Calculate the sum
+					for(var iterator = 0; iterator < totalnum; iterator++){
+						sum += parseInt(numbers[iterator]);
+					}
+					
+					// Calculate the average
+					avg = sum / totalnum;
+					
+					// Calculate the Maximum value
+					// Assume the first element is the largest
+					max = parseInt(numbers[0]);
+					// Iterate through the list
+					for(var j_iterator = 1; j_iterator < totalnum; j_iterator++){
+						num_value = parseInt(numbers[j_iterator]);
+						// Check if the current element is larger than max value
+						if(num_value > max)
+							max = num_value;	// if Yes, assign max to the current value
+					}
+				
+					// Print the results
+				//	document.getElementById("avge").value = avg;
+				//	document.getElementById("maximm").value = max;
+				}
+				else{
+					alert("Error Message: The Data field should contain atleast 10 numbers to calculate");
+					document.getElementById("numbers").focus();
+				}
+			}
+			
+			// Function to validate the Survey Page
+			function PageValidation(){
+				var ErrorFlag = false;		// Check if there is any error; to display the message
+				var InputFlag;				// 0 - no Errors; 1- Error in fname; 2- Error in lname; 3- Error in both 
+				var AddressFlag;			// 0 - No Error; 1- Error
+				var CheckboxFlag;
+				var RadioButtonFlag;
+				var EmailFlag;
+				var Error_message;			// Variable to store the all the error messages to be displayed
+				
+				// Check for the first and Last Name 
+				InputFlag 			= ValidateInputName();
+				AddressFlag 		= ValidateAddressText();
+				CheckboxFlag 		= ValidateCheckBox();
+				RadioButtonFlag 	= ValidateRadioButton();
+				EmailFlag			= ValidateEmailId();
+				
+				if((InputFlag > 0) || (AddressFlag == 1) || (CheckboxFlag < 2) || (RadioButtonFlag == false) || (EmailFlag == false))
+					ErrorFlag = true;
+				
+				if(ErrorFlag == true)
+					Error_message ="<br />The following error(s) are present in this page:<br />";
+				
+				if(InputFlag > 0){
+					if(InputFlag == 3)
+						Error_message += "-> Error: First & Last Name should contain only alphabets<br />";
+					else if(InputFlag == 2)
+						Error_message += "-> Error: Last Name should contain only alphabets<br />";
+					else if(InputFlag == 1)
+						Error_message += "-> Error: First Name should contain only alphabets<br />";
+				}
+				
+				if(AddressFlag == 1)
+					Error_message += "-> Error in Street Address Field<br />";
+				
+				if(CheckboxFlag < 2)
+					Error_message += "-> Error: Atleast 2 checkbox should be checked<br />";
+				
+				if(RadioButtonFlag == false)
+					Error_message += "-> Error: One Radio Button should be checked<br />";
+					
+				if(EmailFlag == false)	
+					Error_message += "-> Error: The Email Id is not Valid<br />";
+					
+				if(ErrorFlag == true)
+				{
+					 $("<span class=\"jquery\"></span>").html(Error_message).dialog({ title: "Error Message",
+															resizable: false,
+															width: 400,								
+															modal: true,
+															buttons: {
+																"Ok": function() 
+																{
+																	$( this ).dialog( "close" );
+																}}});
+				}
+			}
+			
+			// Function to validate the Name that is entered by the user
+			function ValidateInputName(){
+				var first_name;
+				var last_name;
+				var string_length;
+				var iterator;
+				var char_code;
+				var flag_fname = false;
+				var flag_lname = false;
+				
+				// Get the First Name
+				first_name = document.getElementById("fname").value;
+				string_length = first_name.length;		// Get the First Name Length
+				
+				// Check if the first name string has only Alphabets
+				for(iterator = 0; iterator < string_length; iterator++){
+					char_code = first_name.charCodeAt(iterator);
+					if(!((char_code >= 65) && (char_code <= 90)) && !((char_code >= 95) && (char_code <= 122))){
+						flag_fname = true;
+						// Make the field null
+						document.getElementById("fname").value = "";
+						break;
+					}	
+				}
+				
+				// Get the Last Name
+				last_name = document.getElementById("lname").value;
+				string_length = last_name.length;		// Get the Last Name Length
+				
+				// Check only if the user has entered a value; this not a mandatory field for last name
+				if(string_length > 0){
+					// Check if the last name string has only Alphabets
+					for(iterator = 0; iterator < string_length; iterator++){
+						char_code = last_name.charCodeAt(iterator);
+						if(!((char_code >= 65) && (char_code <= 90)) && !((char_code >= 95) && (char_code <= 122))){
+							flag_lname = true;
+							// Make the field null
+							document.getElementById("lname").value = "";
+							break;
+						}	
+					}
+				}
+				
+				if((flag_fname == true) && (flag_lname == true))
+					return 3;
+				else if(flag_lname == true)
+					return 2;
+				else if(flag_fname == true)
+					return 1;
+				else 
+					return 0;
+			}
+			
+			// Function to Validate the Street Address entered by the user
+			function ValidateAddressText(){
+				var address_text;
+				var string_length;
+				var iterator;
+				
+				address_text = document.getElementById("saddress").value;
+				string_length = address_text.length;		// Get the Address Length
+				
+				// Check if the first name string has only Alphabets
+				for(iterator = 0; iterator < string_length; iterator++){
+					char_code = address_text.charCodeAt(iterator);
+					// Check if the address any character that is not alphabets, numbers and Space
+					if(!((char_code >= 65) && (char_code <= 90)) && !((char_code >= 95) && (char_code <= 122)) && !((char_code >= 48) && (char_code <=57)) && !(char_code == 32)){
+						// Make the field null
+						document.getElementById("saddress").value = "";
+						return 1;
+					}	
+				}
+				return 0;
+			}
+			
+			// Function to count the number of checkbox that has been checked
+			function ValidateCheckBox(){
+				var count = 0;
+				var checked_box;
+				var length;
+			
+				checked_box = document.getElementsByName("thingstolike");
+				length = checked_box.length;
+				
+				for(var iterator = 0; iterator < length; iterator++){
+					if((checked_box[iterator].type == "checkbox") && (checked_box[iterator].checked == true))
+						count++;
+				}
+				
+				return count;
+			}
+			
+			// Function to check if a Radio button has been checked
+			function ValidateRadioButton(){
+				var checked_radio;
+				var length;
+				
+				checked_radio = document.getElementsByName("interests");
+				length = checked_radio.length;
+				
+				for(var iterator = 0; iterator < length; iterator++){
+					if((checked_radio[iterator].type = "radio") && (checked_radio[iterator].checked == true))
+						return true;
+				}
+				return false;
+			}
+			
+			// Function to check if the entered mail id is valid
+			function ValidateEmailId(){
+				var emailId;
+				
+				emailId = document.getElementById("email_id").value;
+				if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailId)){
+					return true;
+				}
+				return false;
+			}
+			
+			function ValidateZipCode(zip){
+				var webServiceUrl = "http://mason.gmu.edu/~vrajavel/zipcode_varun.json";
+				var zipcode;
+				var xhttp;
+				var invalidZipFlag = true; 
+				
+				zipcode = document.getElementById("zip").value;
+				
+				if(window.XMLHttpRequest){
+					xhttp = new XMLHttpRequest();
+				}
+				else{
+					xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xhttp.onreadystatechange = function(){
+					if (xhttp.readyState == 4 && xhttp.status == 200) {
+						var dataResp = xhttp.responseText;
+						var params = JSON.parse(dataResp); 
+						
+						for(var iterator = 0; iterator < params.zipcodes.length; iterator++){
+							if(params.zipcodes[iterator].zip == zipcode){
+								document.getElementById("city").innerHTML = params.zipcodes[iterator].city;
+								document.getElementById("state").innerHTML = params.zipcodes[iterator].state;
+								document.getElementById("zip_err").innerHTML = '';
+								
+								invalidZipFlag = false;
+							}
+						}
+						if(invalidZipFlag == true){
+							document.getElementById("zip_err").innerHTML = "Invalid Zip";
+							document.getElementById("city").innerHTML = '';
+							document.getElementById("state").innerHTML = '';
+						}
+					}
+	
+				}
+					xhttp.open("GET", webServiceUrl, true);
+					xhttp.setRequestHeader("Accept", "application/json; charset=utf-8" ); 
+					xhttp.send();
+			}
+			</script>
+		</form>
+	</div>
+	</body>
+	
+</html>
