@@ -1,5 +1,8 @@
 # Student_form_Servlet_
-includes Form Validation &amp; Servlet using MVC pattern
+Includes 
+- Servlets (MVC Architecture)
+- jsp pages
+- Form Validation &amp; 
 
 Software and jar files Required:
 
