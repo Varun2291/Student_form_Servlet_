@@ -10,5 +10,7 @@
 </head>
 <body>
 <h2>There is no such Student with this ID</h2>
+Please check again the student details!
+<%@include file="Survey_Page.html" %>
 </body>
 </html>
